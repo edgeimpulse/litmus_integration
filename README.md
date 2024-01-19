@@ -8,6 +8,8 @@ This deployment includes:
 - 1 Lambda function (python)
 - 1 Event Rule, which forwards the incoming AWS IoT messages to the Lambda
 
+![Architecture Overview](./images/architecture.jpeg)
+
 # Prerequisites
 
 1. This module uses Terraform for deployment, and requires that the (Terraform CLI)[https://developer.hashicorp.com/terraform/install] be installed on the client machine that is running these scripts.
@@ -48,4 +50,20 @@ This only needs to be run once, but it is not harmful and can be run multiple ti
 
 The Litmus Edge Gateway has pre-built integration with AWS integration, which is described in their [https://docs.litmus.io/litmusedge/how-to-guides/integration-guides/aws-amazon-web-services](Solution Guide for AWS).
 
-When choosing the AWS IoT topic name, this integration is pre-built to use "litmusedgetopic".
+When choosing the AWS IoT topic name, this integration is pre-built to use a topic named "litmusedgetopic".
+
+To configure which tags will be sent to this topics, perform the following actions:
+
+1. Add a new Metadata parameter named "Use_EI" with a value equal to "True" to each of the Tags which you want to send to the topic.
+
+2. Configure a Flow which will filter for Tags with this Metadata, aggregate data for 5 seconds, and then send the data to the AWS IoT Topic. 
+
+![Data Flow](./images/data_flow.jpeg)
+
+3. This flow should then begin sending batches of Tag values to the AWS IoT topic
+
+# Using the Deployed Model from Edge Impulse for inference at the Edge 
+
+1. Choose the Docker Container Deployment option for your trained Edge Impulse model. 
+
+![Inference Flow](./images/inference.jpeg)
